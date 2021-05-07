@@ -1,2 +1,3 @@
 Flask==1.1.2
 boto3==1.17.53
+gunicorn

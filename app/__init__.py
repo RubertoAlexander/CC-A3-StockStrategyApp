@@ -2,4 +2,4 @@ from flask import Flask
 
 application = app = Flask(__name__)
 
-from app import views
+from app import views, models

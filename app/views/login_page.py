@@ -2,7 +2,7 @@ from flask import render_template, request, redirect
 
 from app import app
 
-@app.route("/login_page")
+@app.route("/login")
 def login_page():
     return render_template("loginpage.html")
 

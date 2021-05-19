@@ -7,15 +7,35 @@
                     <a class="nav-link" href = "/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href = "contact">Contact Us</a>
+                    <a class="nav-link" href = "contactus_page">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href = "about">About us</a>
+                    <a class="nav-link" href = "aboutus_page">About us</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
+                <!-- {% if username %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="myuserdetails_page/{{ username }}">View my details</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="login_page">Placeholder - Log out</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href = "login_page">Login</a>
+                    </li>
+                {% endif %} -->
                 <li class="nav-item">
-                    <a class="nav-link" href = "login">Login</a>
+                    {% if username %}
+                        <a class="nav-link" href = "myuserdetails_page/{{ username }}">{{ username }}</a>
+                    {% else %}
+                        <a class="nav-link" href = "login_page">Login</a>
+                    {% endif %}
                 </li>
             </ul>
         </div>

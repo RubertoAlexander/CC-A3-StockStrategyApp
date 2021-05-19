@@ -1,10 +1,10 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, make_response
 
 from app import app
 
 from app.models import dynamodb_login
 
-@app.route("/login_page")
+@app.route("/login")
 def login_page():
     return render_template("loginpage.html")
 
@@ -21,8 +21,12 @@ def login():
 
     # admin webpage
     elif(user["username"] == "admin"):
-        return redirect(url_for("admin_page", username = user["username"]))
+        response = make_response(redirect("/admin"))
+        response.set_cookie("username", user["username"])
+        return response
 
     # user webpage
-    else:        
-        return render_template("mainpage.html", username = username)
+    else:
+        response = make_response(redirect("/"))
+        response.set_cookie("username", user["username"])      
+        return response

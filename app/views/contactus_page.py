@@ -4,4 +4,6 @@ from app import app
 
 @app.route("/contactus_page")
 def contactus_page():
-    return render_template("contactuspage.html")
+    username = request.cookies.get("username")
+
+    return render_template("contactuspage.html", username=username)

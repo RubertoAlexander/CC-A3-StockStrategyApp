@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, make_response
 
 from app import app
 
@@ -8,3 +8,9 @@ def main_page():
     if not username: redirect("/login")
         
     return render_template("mainpage.html", username=username)
+
+@app.route("/logout")
+def logout():
+    response = make_response(redirect("/"))
+    response.delete_cookie("username")
+    return response

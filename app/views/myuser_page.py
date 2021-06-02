@@ -2,16 +2,14 @@ from flask import render_template, request, redirect
 
 from app import app
 
-# @app.route("/myuserdetails_page/")
-# def myuserdetails_page():
-#     username = "Testing"
-#     return render_template("myuserpage.html", username = username)
+from app.models import dynamodb_userdb
 
-@app.route("/myuserdetails_page/<string:username>")
-def myuserdetails_page(username):
-    return render_template("myuserpage.html", username = username)
+@app.route("/myuserdetails_page")
+def myuserdetails_page():
+    username = request.cookies.get("username")
 
-
-@app.route("/changeaccountdetails_page/<string:username>")
-def changeaccountdetails_page(username):
-    return render_template("changeaccountdetailspage.html", username = username)
+    # Check for admin username
+    if username == "admin":
+        return render_template("adminuserpage.html", username = username)
+    else:
+        return render_template("myuserpage.html", username = username)

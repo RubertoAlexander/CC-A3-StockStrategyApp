@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, make_response
 
 from app import app
 
@@ -38,8 +38,16 @@ def register():
     # Add user to dynamodb database
     dynamodb_register.addUser(email, username, password)
 
-    # return render_template("mainpage.html")
-    return redirect(url_for("main_page"))
+    # Instead of redirecting user back to main page and not logged in,
+    # why not direct user to main page while logged in?
+    
+    # # Return to main page and not logged in
+    # return redirect(url_for("main_page"))
+
+    # Return to main page and logged in
+    response = make_response(redirect("/"))
+    response.set_cookie("username", username)      
+    return response
 
 
 

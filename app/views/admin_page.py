@@ -7,7 +7,7 @@ def admin_page():
     username = request.cookies.get("username")
     if not username: return redirect("/login")
     
-    return render_template("adminmainpage.html", username = username)
+    return render_template("adminuserpage.html", username = username)
 
 @app.route("/admindisplayusers")
 def admindisplayusers_page():

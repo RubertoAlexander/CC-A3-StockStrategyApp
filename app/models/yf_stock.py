@@ -27,7 +27,7 @@ def get_prices(symbol: str):
 
 def get_summary(symbol: str):
     endpoint = url + "/get-summary"
-    querystring = {"symbol":symbol, "region":REGION}
+    querystring = {"symbol":symbol+".AX", "region":REGION}
 
     response = get_response(querystring, endpoint)
     return response

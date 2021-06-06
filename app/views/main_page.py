@@ -6,17 +6,10 @@ from app import app
 @app.route("/")
 def main_page():
     username = request.cookies.get("username")
-    if not username:
-        return redirect("/login")
-
-    favourites = dynamodb_favourites.get_favourites(username)
-    print(favourites)
-    fav_stocks = []
-    for stock in favourites["stocks"]:
-        fav_stocks.append(stock[:3])
-    print(fav_stocks)
+    # if not username:
+    #     return redirect("/login")
         
-    return render_template("mainpage.html", username=username, favs=fav_stocks)
+    return render_template("mainpage.html", username=username)
 
 @app.route("/logout")
 def logout():

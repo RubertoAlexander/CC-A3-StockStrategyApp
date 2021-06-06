@@ -13,8 +13,15 @@ def stock_page(symbol: str):
         "name": yf_stock.get_name(symbol),
         "prices": yf_stock.get_prices(symbol)
     }
+
+    favourites = dynamodb_favourites.get_favourites(username)
+    print(favourites)
+    fav_stocks = []
+    for fav in favourites["stocks"]:
+        fav_stocks.append(fav[:3])
+    print(fav_stocks)
         
-    return render_template("stock_page.html", stock=stock)
+    return render_template("stock_page.html", stock=stock, favs=fav_stocks)
 
 @app.route("/fav/<symbol>")
 def add_favourite(symbol: str):

@@ -10,7 +10,7 @@
     <div class="row">
         <h5 class="col-sm">{{stock.symbol}}      ${{stock.prices.price}}</h5>
         <span class="col-sm"></span>
-        <button class="col-sm">Add to Favourites</button>
+        <a class="col-sm btn btn-outline-primary" href="/fav/{{stock.symbol}}">Add to Favourites</a>
         <p>
             Open: ${{stock.prices.open}}
             High: ${{stock.prices.high}}

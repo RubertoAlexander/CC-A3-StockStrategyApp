@@ -6,11 +6,25 @@
 
 <br>
 
-<body class = "container">
+<body class = "container vh-100">
 
-    <h3>Main Page</h3>
+    <div class="row">
+        <div class="col-sm">
+            <h3>Main Page</h3>
 
-    <h5>Placeholder - There will be drawings here :)</h5>
+            <h5>Placeholder - There will be drawings here :)</h5>
+        </div>
+        <div class="col-sm"></div>
+        <div class="col-sm"></div>
+        <div class="col-sm">
+            <div class="list-group">
+                <h5 class="mb-1">Favourites</h5>
+            {% for fav in favs %}
+                <a class="list-group-item list-group-item-action border" href="/stock/{{fav}}">{{fav}}</a>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
 
 </body>
 {% endblock %}

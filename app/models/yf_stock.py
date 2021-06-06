@@ -1,0 +1,37 @@
+import requests
+from requests.models import Response
+
+url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2"
+
+REGION = "AU"
+
+headers = {
+    'x-rapidapi-key': "fd38072801msh94e42590875e834p1d8df6jsnc07d0376b458",
+    'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com"
+    }
+
+def get_name(symbol: str):
+    response = get_summary(symbol)
+    return response["quoteType"]["longName"]
+
+def get_prices(symbol: str):
+    response = get_summary(symbol)
+    prices = {
+        "price": response["price"]["regularMarketPrice"]["raw"],
+        "open": response["price"]["regularMarketOpen"]["raw"],
+        "high": response["price"]["regularMarketDayHigh"]["raw"],
+        "low": response["price"]["regularMarketDayLow"]["raw"],
+        "close": response["price"]["regularMarketPreviousClose"]["raw"],
+    }
+    return prices
+
+def get_summary(symbol: str):
+    endpoint = url + "/get-summary"
+    querystring = {"symbol":symbol+".AX", "region":REGION}
+
+    response = get_response(querystring, endpoint)
+    return response
+
+def get_response(query: dict, endpoint: str) -> Response:
+    response = requests.request("GET", endpoint, headers=headers, params=query)
+    return response.json()

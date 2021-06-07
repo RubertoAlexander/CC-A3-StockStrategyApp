@@ -9,9 +9,11 @@
         <div class="col-10">
             <h3>{{stock.name}}</h3>
             <div class="row">
-                <h5 class="col">{{stock.symbol}}      ${{stock.prices.price}}</h5>
-                <span class="col"></span>
-                <a class="col btn btn-outline-primary" href="/fav/{{stock.symbol}}">Add to Favourites</a>
+                <h5 class="col-5">{{stock.symbol}}      ${{stock.prices.price}}</h5>
+                <span class="col-6"></span>
+                <a id="fav" class="col-1" href="#">
+                    <i class="bi bi-star"></i>
+                </a>
                 <p>
                     Open: ${{stock.prices.open}}
                     High: ${{stock.prices.high}}
@@ -48,11 +50,42 @@
             <div class="list-group">
                 <h5 class="mb-1">Favourites</h5>
                 {% for fav in favs %}
-                    <a class="list-group-item list-group-item-action border" href="/stock/{{fav}}">{{fav}}</a>
+                    <button class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</button>
                 {% endfor %}
             </div>
         </div>
     </div>
 
 </body>
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('a#fav').forEach(item => {
+            item.onclick = () => {
+                fetch(`/fav/{{stock.symbol}}`, {
+                    method: "POST",
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                    "content-type": "application/json"
+                    })
+                }).then(function (response) {
+                    response.json().then(function(data) {
+                        icon = item.firstElementChild
+                        console.log(icon)
+                        if(data == true) {
+                            icon.classList.remove("bi-star")
+                            icon.classList.add("bi-star-fill")
+                        }
+                        else {
+                            icon.classList.remove("bi-star-fill")
+                            icon.classList.add("bi-star")
+                        }
+                    });
+                });
+            };
+        });
+    });
+</script>
 {% endblock %}

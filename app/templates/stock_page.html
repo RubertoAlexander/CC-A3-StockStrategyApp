@@ -12,7 +12,11 @@
                 <h5 class="col-5">{{stock.symbol}}      ${{stock.prices.price}}</h5>
                 <span class="col-6"></span>
                 <a id="fav" class="col-1" href="#">
+                    {% if stock.symbol in favs %}
+                    <i class="bi bi-star-fill"></i>
+                    {% else %}
                     <i class="bi bi-star"></i>
+                    {% endif %}
                 </a>
                 <p>
                     Open: ${{stock.prices.open}}
@@ -29,7 +33,7 @@
                     new TradingView.widget(
                     {
                         "autosize": true,
-                        "symbol": "ASX:{{stock.symbol}}",
+                        "symbol": "ASX:{{stock.symbol.split('.')[0]}}",
                         "interval": "D",
                         "timezone": "Australia/Sydney",
                         "theme": "light",
@@ -49,14 +53,16 @@
         <div class="col">
             <div class="list-group">
                 <h5 class="mb-1">Favourites</h5>
-                {% for fav in favs %}
-                    <button class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</button>
-                {% endfor %}
+                <div id="fav-list">
+                    {% for fav in favs %}
+                        <a class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</a>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
 
-</body>
+</body> 
 
 <script type="text/javascript">
 
@@ -72,16 +78,28 @@
                     })
                 }).then(function (response) {
                     response.json().then(function(data) {
-                        icon = item.firstElementChild
-                        console.log(icon)
-                        if(data == true) {
-                            icon.classList.remove("bi-star")
-                            icon.classList.add("bi-star-fill")
+                        icon = item.firstElementChild;
+
+                        if(data.added == true) {
+                            icon.classList.remove("bi-star");
+                            icon.classList.add("bi-star-fill");
                         }
                         else {
-                            icon.classList.remove("bi-star-fill")
-                            icon.classList.add("bi-star")
+                            icon.classList.remove("bi-star-fill");
+                            icon.classList.add("bi-star");
                         }
+
+                        fav_list = document.getElementById("fav-list");
+                        fav_list.innerHTML = "";
+                        console.log(data.favs);
+                        data.favs.forEach(function (stock) {
+                            let a = document.createElement('a');
+                            a.classList = "list-group-item list-group-item-action border";
+                            a.id = stock
+                            a.href = "/stock/"+stock
+                            a.innerHTML = stock;
+                            fav_list.appendChild(a);
+                        });
                     });
                 });
             };

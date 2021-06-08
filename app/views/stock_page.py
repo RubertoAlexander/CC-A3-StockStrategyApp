@@ -1,9 +1,9 @@
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, jsonify
 
 from app import app
 from app.models import dynamodb_favourites, yf_stock
 
-@app.route("/stock/<symbol>")
+@app.route("/stock/<symbol>", methods=["GET"])
 def stock_page(symbol: str):
     username = request.cookies.get("username")
     if not username: return redirect("/login")
@@ -15,20 +15,26 @@ def stock_page(symbol: str):
     }
 
     favourites = dynamodb_favourites.get_favourites(username)
-    print(favourites)
-    fav_stocks = []
-    for fav in favourites["stocks"]:
-        fav_stocks.append(fav[:3])
-    print(fav_stocks)
-        
-    return render_template("stock_page.html", stock=stock, favs=fav_stocks)
+    
+    return render_template("stock_page.html", stock=stock, favs=favourites["stocks"])
 
-@app.route("/fav/<symbol>")
-def add_favourite(symbol: str):
+@app.route("/fav/<symbol>", methods=["POST"])
+def favourite(symbol: str):
     username = request.cookies.get("username")
     favourites = dynamodb_favourites.get_favourites(username)
     stocks = favourites["stocks"]
-    stocks.add(symbol+".AX")
+
+    if symbol in stocks:
+        stocks.remove(symbol)
+        added = False
+    else:
+        stocks.append(symbol)
+        added = True
 
     result = dynamodb_favourites.put_favourites(username, stocks)
-    return redirect("/stock/"+symbol)
+    if result:
+        fav_dict = jsonify(
+            added=added,
+            favs=stocks
+        )
+        return fav_dict

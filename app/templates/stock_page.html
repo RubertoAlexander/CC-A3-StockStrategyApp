@@ -1,0 +1,109 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<br>
+
+<body class = "container">
+    <div class="row">
+        <div class="col-10">
+            <h3>{{stock.name}}</h3>
+            <div class="row">
+                <h5 class="col-5">{{stock.symbol}}      ${{stock.prices.price}}</h5>
+                <span class="col-6"></span>
+                <a id="fav" class="col-1" href="#">
+                    {% if stock.symbol in favs %}
+                    <i class="bi bi-star-fill"></i>
+                    {% else %}
+                    <i class="bi bi-star"></i>
+                    {% endif %}
+                </a>
+                <p>
+                    Open: ${{stock.prices.open}}
+                    High: ${{stock.prices.high}}
+                    Low: ${{stock.prices.low}}
+                    Close: ${{stock.prices.close}}
+                </p>
+            </div>
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container row">
+                <div id="tradingview_5dde6" style="height: 650px; min-height: 500px;"></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                <script type="text/javascript">
+                    new TradingView.widget(
+                    {
+                        "autosize": true,
+                        "symbol": "ASX:{{stock.symbol.split('.')[0]}}",
+                        "interval": "D",
+                        "timezone": "Australia/Sydney",
+                        "theme": "light",
+                        "style": "1",
+                        "locale": "en",
+                        "toolbar_bg": "#f1f3f6",
+                        "enable_publishing": false,
+                        "withdateranges": true,
+                        "hide_side_toolbar": false,
+                        "container_id": "tradingview_5dde6"
+                    }
+                    );
+                </script>
+            </div>
+            <!-- TradingView Widget END -->
+        </div>
+        <div class="col">
+            <div class="list-group">
+                <h5 class="mb-1">Favourites</h5>
+                <div id="fav-list">
+                    {% for fav in favs %}
+                        <a class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body> 
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('a#fav').forEach(item => {
+            item.onclick = () => {
+                fetch(`/fav/{{stock.symbol}}`, {
+                    method: "POST",
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                    "content-type": "application/json"
+                    })
+                }).then(function (response) {
+                    response.json().then(function(data) {
+                        icon = item.firstElementChild;
+
+                        if(data.added == true) {
+                            icon.classList.remove("bi-star");
+                            icon.classList.add("bi-star-fill");
+                        }
+                        else {
+                            icon.classList.remove("bi-star-fill");
+                            icon.classList.add("bi-star");
+                        }
+
+                        fav_list = document.getElementById("fav-list");
+                        fav_list.innerHTML = "";
+                        console.log(data.favs);
+                        data.favs.forEach(function (stock) {
+                            let a = document.createElement('a');
+                            a.classList = "list-group-item list-group-item-action border";
+                            a.id = stock
+                            a.href = "/stock/"+stock
+                            a.innerHTML = stock;
+                            fav_list.appendChild(a);
+                        });
+                    });
+                });
+            };
+        });
+    });
+</script>
+{% endblock %}

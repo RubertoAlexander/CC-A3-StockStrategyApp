@@ -1,3 +1,4 @@
+from app.models import dynamodb_favourites
 from flask import render_template, request, redirect, make_response
 
 from app import app

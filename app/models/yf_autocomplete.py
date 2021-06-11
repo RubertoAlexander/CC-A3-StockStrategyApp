@@ -1,12 +1,14 @@
 import requests
 from requests.models import Response
 
+from app.models import config
+
 url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/auto-complete"
 
 REGION = "AU"   
 
 headers = {
-    'x-rapidapi-key': "fd38072801msh94e42590875e834p1d8df6jsnc07d0376b458",
+    'x-rapidapi-key': config.stockAPI_key(),
     'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com"
     }
 

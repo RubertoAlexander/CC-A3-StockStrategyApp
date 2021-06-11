@@ -6,4 +6,4 @@ from app import app
 def aboutus_page():
     username = request.cookies.get("username")
 
-    return render_template("aboutuspage.html", username=username)
+    return render_template("aboutuspage.html", username = username)

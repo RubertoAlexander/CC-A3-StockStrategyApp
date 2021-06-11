@@ -7,9 +7,9 @@ from app.models import dynamodb_userdb
 @app.route("/myuserdetails_page")
 def myuserdetails_page():
     username = request.cookies.get("username")
-
+    user = dynamodb_userdb.getUserFromUsername(username)
     # Check for admin username
     if username == "admin":
         return render_template("adminuserpage.html", username = username)
     else:
-        return render_template("myuserpage.html", username = username)
+        return render_template("myuserpage.html", username = username, user = user)

@@ -7,13 +7,15 @@ from app.models import dynamodb_userdb
 
 table = dynamodb.Table("a3-user")
 
+def checkRetypePassword(password, retype_password) -> bool:
+    result = False
+    
+    if(password == retype_password):
+        result = True
+
+    return result
+
 def checkEmailIfUsed(email) -> str:
-    # response = table.scan(
-    #     FilterExpression = Attr("email").eq(email)
-    # )
-
-    # items =  response["Items"]
-
     items = dynamodb_userdb.checkEmailInDB(email)
 
     if(len(items) != 0):
@@ -22,12 +24,6 @@ def checkEmailIfUsed(email) -> str:
         return "empty"
 
 def checkUsernameIfUsed(username) -> str:
-    # response = table.scan(
-    #     FilterExpression = Attr("username").eq(username)
-    # )
-
-    # items =  response["Items"]
-
     items = dynamodb_userdb.checkUsernameInDB(username)
 
     if(len(items) != 0):
@@ -36,10 +32,13 @@ def checkUsernameIfUsed(username) -> str:
         return "empty"
 
 def addUser(email, username, password):
+    image_version = "1"
+
     table.put_item(
         Item = {
             "email": email,
             "username": username,
-            "password": password
+            "password": password,
+            "image_version": image_version
         }
     )

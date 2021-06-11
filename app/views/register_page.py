@@ -16,7 +16,8 @@ def register():
     retype_password = request.form["retype_password"]
 
     # Checking if both passwords match
-    if not checkRetypePassword(password, retype_password):
+    check_retype_password = dynamodb_register.checkRetypePassword(password, retype_password)
+    if not (check_retype_password):
         return render_template("registerpage.html", registerError = "Passwords do not match. Please re-enter again.")
 
     # Checking if username is taken
@@ -48,13 +49,3 @@ def register():
     response = make_response(redirect("/"))
     response.set_cookie("username", username)      
     return response
-
-
-
-def checkRetypePassword(password, retype_password) -> bool:
-    result = False
-    
-    if(password == retype_password):
-        result = True
-
-    return result

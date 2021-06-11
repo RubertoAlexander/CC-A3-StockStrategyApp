@@ -13,21 +13,12 @@
     <form action = "/updatedetails" method = "post" enctype = "multipart/form-data">
         <div class = "mb-3">
             <label class = "form-label">Email</label>
-            <input class = "form-control" type = "text" placeholder = "{{ user['email'] }}" name = "email" size = "15" autofocus required>
-        </div>
-
-        <div class = "mb-3">
-            <label class = "form-label">Username</label>
-            <input class = "form-control" type = "text" placeholder = "{{ user['username'] }}" name = "username" size = "15" required>
+            <input class = "form-control" type = "text" value = "{{ user['email'] }}" name = "email" size = "15" autofocus required>
         </div>
 
         <div class = "mb-3">
             <label class = "form-label">Profile image</label>
             <input class = "form-control" type = "file" name = "file" accept = "image/*">
-        </div>
-
-        <div class = "mb-3">
-            <img src = "https://a3-userimage.s3.amazonaws.com/{{ username }}_image.jpg" width = "100" height = "100">
         </div>
 
         <div class = "row">
@@ -36,25 +27,18 @@
 
         <br>
 
-        <div class = "mb-3">
-            <label class = "form-label">Old Password</label>
-            <input class = "form-control" type = "password" placeholder = "Enter Old Password" name = "old_password" size = "15">
-        </div>
-
-        <div class = "mb-3">
-            <label class = "form-label">New Password</label>
-            <input class = "form-control" type = "password" placeholder = "Enter New Password" name = "new_password" size = "15">
-        </div>
-
-        <div class = "mb-3">
-            <label class = "form-label">Re-enter new Password</label>
-            <input class = "form-control" type = "password" placeholder = "Re-enter New Password" name = "password" size = "15">
-        </div>
-
-        <br>
-
-        <button name = "update_details_button" type = "submit">Update my details</button>
+        <button name = "update_details_button" type = "submit">Update my Email/Image</button> {{ updateMessage }}
     </form>
+
+    <br>
+
+    <br>
+
+    <div class = "row">
+        <a href = "updatepassword_page">
+            <button name = "updatepassword_page_button" type = "submit">I want to change my password</button>
+        </a>
+    </div>
 
     <br>
 

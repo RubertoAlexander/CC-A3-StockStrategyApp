@@ -1,0 +1,66 @@
+{% extends 'index.html' %}
+
+{% block header %}
+<h1>{% block title %}Login Page{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<h1>Stock Analyst Web Application</h1>
+
+<br>
+
+<body class = "container">
+
+    <h3>Admin Page - Edit user's profile</h3>
+
+    <div class = "row">
+        <form action = "/adminedit_chosenuser" method = "post" enctype = "multipart/form-data">
+            <div class = "mb-3">
+                <label class = "form-label">Username (Uneditable)</label>
+                <input class = "form-control" type = "text" value = "{{ editing_user['username'] }}" name = "username" size = "15" readonly>
+            </div>
+
+            <div class = "mb-3">
+                <label class = "form-label">Profile image</label>
+                <input class = "form-control" type = "file" name = "file" accept = "image/*">
+            </div>
+
+            <img src = "https://a3-userimage.s3.amazonaws.com/{{ editing_user['username'] }}_{{ editing_user['image_version'] }}_image.jpg" width = "100" height = "100">
+
+            <br>
+
+            <div class = "mb-3">
+                <label class = "form-label">Email</label>
+                <input class = "form-control" type = "text" value = "{{ editing_user['email'] }}" name = "email" size = "15" required>
+            </div>
+
+            <div class = "mb-3">
+                <label class = "form-label">Change password (Option)</label>
+                <input class = "form-control" type = "password" placeholder = "Change password" name = "password" size = "15">
+            </div>
+    
+            <br>
+    
+            <button name = "adminedit_chosenuser_button" type = "submit">Edit User</button> {{ errorMessage }}
+        </form>
+        
+        <br>
+        <br>
+
+        <a href = "{{ url_for('admindelete_chosenuser', user_username = editing_user['username']) }}">
+            <button name = "admin_deleteuser_button" type = "submit">Delete user instead</button>
+        </a>
+    </div>
+
+    <br>
+    <br>
+
+    <div class = "row">
+        <a href = "{{ url_for('admindisplayusers_page') }}">
+            <button name = "admindisplayusers_page_button" type = "submit">Return to View all users</button>
+        </a>
+    </div>
+
+</body>
+{% endblock %}

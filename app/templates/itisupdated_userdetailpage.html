@@ -1,0 +1,24 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h1>Stock Analyst Web Application</h1>
+
+<br>
+
+<body class = "container">
+
+    <h3>Change my details page</h3>
+
+    <br>
+
+    <h5>Your details are updated!</h5>
+
+    <div class = "row">
+        <a href = "{{ url_for('updateuserdetail_page') }}">
+            <button name = "updateuserdetail_page_button" type = "submit">Return to Change my details page</button>
+        </a>
+    </div>
+    
+</body>
+{% endblock %}

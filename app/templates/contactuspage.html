@@ -13,8 +13,59 @@
 <body class = "container">
 
     <h3>Contact Us Page</h3>
+    
+    <div class = "row">
+        <div class = "col">
+            <p>
+                We regret to inform you that phone support is temporary unavailable.<br>
+                You may send a message to us by filling the form, or submit an email to us.<br>
+            </p>
+                
+            <br>
 
-    <h5>We are uncontactable. Sorry.</h5>
+            <p>
+                Please submit an email instead for any queries that includes any file attachments.<br>
+                Customer/Technical Support: support@abcdefghijklmnopqrstuvwxyz.com<br>
+            </p>
+
+            <br>
+
+            <p>
+                Our estimated reply time is within 2 business days. Thank you for being patient with us.<br>
+            </p>
+        </div>
+        <div class = "col">
+            <p>
+                Please fill in your details and query below.
+            </p>
+
+            <form action = "/contactus_sendmessage" method = "post">
+                <div class="form-floating mb-3">
+                    <input class = "form-control" type = "text" name = "name" id = "floatingInput" placeholder = "Name" required>
+                    <label for = "floatingInput">Name</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class = "form-control" type = "text" name = "email" id = "floatingInput" placeholder = "Name" required>
+                    <label for = "floatingInput">Email</label>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input class = "form-control" type = "text" name = "subject" id = "floatingInput" placeholder = "Name" required>
+                    <label for = "floatingInput">Subject</label>
+                </div>
+
+                <div class="form-floating">
+                    <textarea class = "form-control" name = "message" id = "floatingTextarea" placeholder = "Message" style = "height: 100px" required></textarea>
+                    <label for = "floatingTextarea">Message</label>
+                </div>
+
+                <br>
+        
+                <button name = "contactus_sendmessage_button" type = "submit">Submit</button> {{ message }}
+            </form>
+        </div>
+    </div>
 
 </body>
 {% endblock %}

@@ -7,10 +7,33 @@
 <br>
 
 <body class = "container">
+    <style>
+        div.scrollable-container {
+            width: 500px;
+            height: 500px;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+    </style>
 
     <h3>Main Page</h3>
 
-    <h5>Placeholder - There will be drawings here :)</h5>
-
+    <div class = "row">
+        <div class = "col">
+            I put stuff here!
+            {{ tweet_id_list }}
+        </div>
+        <div class = "col">
+            <h5>Latest Tweets~</h5>
+            <div class = "scrollable-container">
+                {% for tweet_id in tweet_id_list %}
+                    <blockquote class = "twitter-tweet"><a href = "https://twitter.com/x/status/{{ tweet_id }}"></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class = "row">
+        Lets add more stuffs above or below the div above...? haha
+    </div>
 </body>
 {% endblock %}

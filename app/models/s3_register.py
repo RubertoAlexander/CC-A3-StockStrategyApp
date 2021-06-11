@@ -20,8 +20,10 @@ def addUserImage(username, imagefile):
 
     imagefile.save(file_directory)
 
+    image_version = "1"
+
     # Upload to s3
-    s3filename = username + "_image.jpg"
+    s3filename = username + "_" + image_version + "_image.jpg"
 
     s3.Bucket(userimage_bucket).upload_file(file_directory, s3filename, 
                                             ExtraArgs = {'ACL': 'public-read', 'ContentType': 'image/jpg'})

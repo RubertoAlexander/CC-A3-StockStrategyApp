@@ -10,7 +10,7 @@
                     <a class="nav-link" href = "contactus_page">Contact Us</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href = "aboutus_page">About us</a>
+                    <a class="nav-link" href = "aboutus_page">About Us</a>
                 </li>
             </ul>
             <ul class="navbar-nav ms-auto">
@@ -33,11 +33,11 @@
                 <li class="nav-item">
                     {% if username %}
                         <!-- No image -->
-                            <!-- <a class="nav-link" href = "myuserdetails_page/{{ username }}">{{ username }}</a> -->
+                            <a class="nav-link" href = "myuserdetails_page">My Profile</a>
                         <!-- With image -->
-                        <a class="nav-link" href = "myuserdetails_page" tar>
+                        <!-- <a class="nav-link" href = "myuserdetails_page" tar>
                             <img src = "https://a3-userimage.s3.amazonaws.com/{{ username }}_image.jpg" width = "20" height = "20"> {{ username }}
-                        </a>
+                        </a> -->
                     {% else %}
                         <a class="nav-link" href = "login">Login</a>
                     {% endif %}

@@ -11,13 +11,25 @@
                     {% for stock in favs %}
                         <option value="{{ stock }}">{{ stock }}</option>
                     {% endfor %}
+                    {% if selected  %}
+                        <option value="{{selected.params.stock}}" selected>{{selected.params.stock}}</option>
+                    {% endif %}
                 </select>
                 <small class="form-text text-muted">Select from your favourites</small>
             </div>
-            <div class="col-8">
-                <label for="strategy-name">Strategy Name</label>
-                <input type="text" id="strategy-name" name="strategy-name" class="form-control">
-                <button type="button" id="save" class="btn btn-secondary submit">Save</button>
+            <div class="mb-3 col-8">
+                <div class="row">
+                    <div class="col-2"></div>
+                    <label for="strategy-name">Strategy Name</label>
+                    <div class="col">
+                        <input type="text" id="strategy-name" name="strategy-name" class="form-control" {% if selected %}value="{{selected.strategy_name}}"{% endif %}>
+                    </div>
+                    <div class="col">
+                        <button type="button" id="save" class="btn btn-secondary submit">Save</button>
+                        <span id="save-result"></span>
+                    </div>
+                    <div class="col-2"></div>
+                </div>
             </div> 
             <div class="mb-3 col-1">
                 <label for="timerange">Time Range</label>
@@ -33,6 +45,9 @@
                     <option value="10y">10y</option>
                     <option value="ytd">ytd</option>
                     <option value="max">max</option>
+                    {% if selected %}
+                        <option value="{{selected.params.timerange}}" selected>{{selected.params.timerange}}</option>
+                    {% endif %}
                 </select>
             </div>
             <div class="mb-3 col-1">
@@ -44,6 +59,9 @@
                     <option value="15m">15m</option>
                     <option value="60m">60m</option>
                     <option value="1d">1d</option>
+                    {% if selected %}
+                        <option value="{{selected.params.interval}}" selected>{{selected.params.interval}}</option>
+                    {% endif %}
                 </select>
             </div>
         </div>
@@ -78,9 +96,24 @@
                  </div>
             </div>
             <div id="indicator-box" class="col">
-                <ul class="list-group list-group-flush"></ul>
-                <input type="hidden" name="indicator_buys" id="indicator-buys" value="">
-                <input type="hidden" name="indicator_sells" id="indicator-sells" value="">
+                <ul class="list-group list-group-flush">
+                    {% if selected %}
+                        {% for rule in selected.params.buy_rules.split(",")[:-1] %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{rule}}
+                                <span class='badge bg-success rounded-pill'>buy</span>
+                            </li>
+                        {% endfor %}
+                        {% for rule in selected.params.sell_rules.split(",")[:-1] %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{rule}}
+                                <span class='badge bg-danger rounded-pill'>sell</span>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+                <input type="hidden" name="indicator_buys" id="indicator-buys" {% if selected %}value="{{selected.params.buy_rules}}"{% endif %}>
+                <input type="hidden" name="indicator_sells" id="indicator-sells" {% if selected %}value="{{selected.params.sell_rules}}"{% endif %}>
             </div>
             <button type="button" id="backtest" class="btn btn-primary submit">Backtest</button>
         </div>
@@ -132,7 +165,7 @@
                     stratName = document.getElementById("strategy-name")
                     url = "/builder/"+stock+"/save/"+stratName.value
                 }
-                fetch("/builder/backtest/"+stock, {
+                fetch(url, {
                     method: "POST",
                     body: JSON.stringify({
                         "timerange": document.getElementById("timerange").value,
@@ -148,6 +181,8 @@
                     })
                 }).then(function (response) {
                     response.json().then(function(data) {
+                        if (item.id == "backtest") {
+
                         backtestBox = document.getElementById("backtest-box")
                         backtestBox.classList.add("card")
 
@@ -170,6 +205,12 @@
                                                     "<h5 class='card-title'>Lose Percentage</h5>" +
                                                     "<p class=card-text>"+lose+"%</p>" +
                                                 "</div>"
+                        
+                        }
+                        else if (item.id == "save") {
+                            savedSpan = document.getElementById("save-result")
+                            savedSpan.innerHTML += "<small>SAVED</small>"
+                        }
                     })
                 });
             }

@@ -1,5 +1,7 @@
-import talib
+# import talib
 import numpy as np
+import pandas as pd
+import ta
 
 def run(data: dict, buy_rules: str, sell_rules: str):
 
@@ -7,50 +9,49 @@ def run(data: dict, buy_rules: str, sell_rules: str):
     capital = 10000
     units = 0
 
+    data_df = pd.DataFrame.from_dict(data)
+    data_df = ta.utils.dropna(data_df)
+
+    indicators = {}
+
     rules = buy_rules + sell_rules
     print(rules)
-    data["indicators"] = {}
+    # data_df["indicators"] = {}
     if "stoch" in rules:
-        data["indicators"]["stochk"], data["indicators"]["stochd"] = talib.STOCH(
-            np.array(data["high"], dtype=np.double), np.array(data["low"], dtype=np.double), np.array(data["close"], dtype=np.double)
+        stoch = ta.momentum.StochasticOscillator(
+            data_df["high"], data_df["low"], data_df["close"]
             )
-        print("added stoch")
+        indicators["stochk"] = stoch.stoch().values
+        indicators["stochd"] = stoch.stoch_signal().values
 
     if "rsi" in rules:
-        data["indicators"]["rsi"] = talib.RSI(
-            np.array(data["close"], dtype=np.double)
-            )
-        print("added rsi")
+        rsi = ta.momentum.rsi(data_df["close"])
+        indicators["rsi"] = rsi.values
 
     if "sma" in rules:
-        data["indicators"]["sma50"] = talib.SMA(
-            np.array(data["close"], dtype=np.double), 
-            timeperiod=50
-            )
-        data["indicators"]["sma20"] = talib.SMA(
-            np.array(data["close"], dtype=np.double), 
-            timeperiod=20
-            )
+        sma_50 = ta.trend.SMAIndicator(data_df["close"], 50)
+        indicators["sma50"] = sma_50.sma_indicator().values
+        sma_20 = ta.trend.SMAIndicator(data_df["close"], 20)
+        indicators["sma20"] = sma_20.sma_indicator().values
         print("added sma")
 
     if "macd" in rules:
-        data["indicators"]["macd"], data["indicators"]["macdsignal"], data["indicators"]["macdhist"] = talib.MACD(
-            np.array(data["close"], dtype=np.double)
-            )
+        macd = ta.trend.MACD(data_df["close"])
+        indicators["macdhist"] = macd.macd_signal().values
         print("added macd")
     
     win_trades = 0; lose_trades = 0; bought_price = 0; num_trades = 0
-    for i, price in enumerate(data["close"]):
+    for i, price in enumerate(data_df["close"]):
 
         if price:
             last_price = price
 
             # Check buys
             for rule in buy_rules.split(","):
-                if rule == "stoch": b = stoch_buy(i, data["indicators"]["stochk"], data["indicators"]["stochd"])
-                elif rule == "rsi": b = rsi_buy(i, data["indicators"]["rsi"])
-                elif rule == "macd": b = macd_buy(i, data["indicators"]["macdhist"])
-                elif rule == "sma": b = sma_buy(i, data["indicators"]["sma20"], data["indicators"]["sma50"])
+                if rule == "stoch": b = stoch_buy(i, indicators["stochk"], indicators["stochd"])
+                elif rule == "rsi": b = rsi_buy(i, indicators["rsi"])
+                elif rule == "macd": b = macd_buy(i, indicators["macdhist"])
+                elif rule == "sma": b = sma_buy(i, indicators["sma20"], indicators["sma50"])
 
                 if b and units == 0:
                     units = buy(price, capital)
@@ -60,10 +61,10 @@ def run(data: dict, buy_rules: str, sell_rules: str):
 
             # Check sells
             for rule in sell_rules.split(","):
-                if rule == "stoch": s = stoch_sell(i, data["indicators"]["stochk"], data["indicators"]["stochd"])
-                elif rule == "rsi": s = rsi_sell(i, data["indicators"]["rsi"])
-                elif rule == "macd": s = macd_sell(i, data["indicators"]["macdhist"])
-                elif rule == "sma": s = sma_sell(i, data["indicators"]["sma20"], data["indicators"]["sma50"])
+                if rule == "stoch": s = stoch_sell(i, indicators["stochk"], indicators["stochd"])
+                elif rule == "rsi": s = rsi_sell(i, indicators["rsi"])
+                elif rule == "macd": s = macd_sell(i, indicators["macdhist"])
+                elif rule == "sma": s = sma_sell(i, indicators["sma20"], indicators["sma50"])
                 if s and units > 0:
                     capital = sell(price, units)
                     units = 0

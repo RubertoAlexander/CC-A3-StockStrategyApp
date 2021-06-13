@@ -1,0 +1,28 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<body class = "container vh-100">
+    <div class="row d-flex align-items-center h-75">
+        <div class="col"></div>
+        <div class="col align-self-center">
+            <div class="list-group">
+            {% for strategy in saved %}
+                <a href="/builder/{{strategy['strategy_name']}}" class="list-group-item list-group-item-action">
+                    {{strategy['strategy_name']}}
+                </a>
+            {% endfor %}
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row d-flex align-items-center h-75">
+        <div class="col"></div>
+        <div class="col-6 align-self-center">
+            <h1>Stock Analyst Web Application</h1>
+        </div>
+        <div class="col"></div>
+    </div>
+</body>
+{% endblock %}

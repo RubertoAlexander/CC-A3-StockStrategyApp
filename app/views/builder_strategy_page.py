@@ -11,4 +11,4 @@ def builder_strategy_page():
     favourites = dynamodb_favourites.get_favourites(username)
     print(favourites)
     
-    return render_template("builder_strategy.html", favs=favourites["stocks"])
+    return render_template("builder_strategy.html", favs=favourites["stocks"], username=username)

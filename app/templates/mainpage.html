@@ -16,26 +16,76 @@
         }
     </style>
 
-    <div class="row">
-        <div class="col-sm">
-            <h3>Main Page</h3>
+    <div class = "row">
+        <h3>Home Page</h3>
+    </div>
+
+    <div class = "row">
+        <div class = "row" style = "text-align: center;">
+            <h4><p style = "color:blueviolet">Why use us?</p></h4>
+        </div>
+    
+        <br>
+    
+        <div class = "row">
+            <div class = "col">
+                <h5><p style = "text-align: center;">Interactive and easy to use</p></h5>
+                <p>
+                    As users ourselves, we know that using a complicated service makes us unhappy.
+                    Therefore, our development team aims to make our service as simplfied as possible.
+                    We aim for high usability, so that we can accomodate to everyone!
+                    You do not need to be talented in stocks, we will do the talents for you.
+                </p>
+            </div>
+            <div class = "col">
+                <h5><p style = "text-align: center;">5-Stars Customer Service</p></h5>
+                <p>24/7 Customer Support Available!</p>
+                <p>
+                    We strive to make our customers happy! We treat every customer as our assets, regardless of who you are.
+                    You are part of our family when you register for our service. 
+                    Feel free to let us know anything, and if you need assistance in using the application, do drop us an email, or just send us a message in the contact us box provided.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <br>
 
     <div class = "row">
         <div class = "col">
-            I put stuff here!
-            {{ tweet_id_list }}
+            <h5>Latest News~</h5>
+            <div class = "scrollable-container">
+                {% for news in news_list %}
+                    <div class="card" style="width: auto;">
+                        <div class="card-body">
+                          <h5 class="card-title">{{ news[0] }}</h5>
+                          <p class="card-text">{{ news[1] }}</p>
+                          <p class = "card-text">by: {{ news[2] }}</p>
+                          <a href="{{ news[3] }}" target = "_blank" class="btn btn-primary">Read more here</a>
+                        </div>
+                      </div>
+                {% endfor %}
+            </div>
         </div>
         <div class = "col">
             <h5>Latest Tweets~</h5>
             <div class = "scrollable-container">
                 {% for tweet_id in tweet_id_list %}
-                    <blockquote class = "twitter-tweet"><a href = "https://twitter.com/x/status/{{ tweet_id }}"></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+                    <blockquote class = "twitter-tweet"><a href = "https://twitter.com/x/status/{{ tweet_id }}" target = "_blank"></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
                 {% endfor %}
             </div>
         </div>
     </div>
-    <div class = "row">
-        Lets add more stuffs above or below the div above...? haha
+    
+    <br>
+    <br>
+
+    <div class = "row" style = "text-align: center;">
+        <p>Melbourne, Australia | RMIT Cloud Computing Students | stansup123@gmail.com</p>
     </div>
+
+    <br>
+    <br>
+
 </body>
 {% endblock %}

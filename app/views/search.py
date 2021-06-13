@@ -1,5 +1,5 @@
 from app.models import yf_autocomplete
-from flask import render_template, request, redirect, make_response, jsonify
+from flask import jsonify
 
 from app import app
 
@@ -11,9 +11,14 @@ def search(query: str):
     if result:
         for quote in result["quotes"]:
             if quote["exchange"] == "ASX":
+                name = ""
+                if "shortname" in quote:
+                    name = quote["shortname"]
+                elif "longname" in quote:
+                    name = quote["longname"]
                 quotes.append({
                     "symbol": quote["symbol"],
-                    "name": quote["shortname"]
+                    "name": name
                 })
 
         search_dict = jsonify(

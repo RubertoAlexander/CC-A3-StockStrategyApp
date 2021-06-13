@@ -15,15 +15,22 @@ def stock_page(symbol: str):
     }
 
     favourites = dynamodb_favourites.get_favourites(username)
+    fav_stocks = None
+    if favourites:
+        fav_stocks = favourites["stocks"]
     
-    return render_template("stock_page.html", username = username, stock=stock, favs=favourites["stocks"])
+    return render_template("stock_page.html", username = username, stock=stock, favs=fav_stocks)
 
 @app.route("/fav/<symbol>", methods=["POST"])
 def favourite(symbol: str):
     username = request.cookies.get("username")
     favourites = dynamodb_favourites.get_favourites(username)
-    stocks = favourites["stocks"]
+    if favourites:
+        stocks = favourites["stocks"]
+    else:
+        stocks = []
 
+    added = False
     if symbol in stocks:
         stocks.remove(symbol)
         added = False

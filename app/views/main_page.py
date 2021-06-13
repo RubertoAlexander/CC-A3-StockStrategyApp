@@ -10,11 +10,8 @@ def main_page():
     username = request.cookies.get("username")
     if not username: redirect("/login")
     
-    # news_list = newsapi.getNews()
-    # tweet_id_list = tweetapi.streamtweets()
-
-    news_list = []
-    tweet_id_list = []
+    news_list = newsapi.getNews()
+    tweet_id_list = tweetapi.streamtweets()
         
     return render_template("mainpage.html", username = username, tweet_id_list = tweet_id_list, news_list = news_list)
 

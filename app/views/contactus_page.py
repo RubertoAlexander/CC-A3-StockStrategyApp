@@ -19,6 +19,6 @@ def contactus_sendmessage():
     subject = request.form["subject"]
     message = request.form["message"]
     
-    # emailapi.sendEmail(name, email, subject, message)
+    emailapi.sendEmail(name, email, subject, message)
 
     return render_template("contactuspage.html", username = username, message = "Your message has been sent")

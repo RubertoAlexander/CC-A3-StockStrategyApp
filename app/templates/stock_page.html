@@ -12,8 +12,12 @@
                 <h5 class="col-5">{{stock.symbol}}      ${{stock.prices.price}}</h5>
                 <span class="col-6"></span>
                 <a id="fav" class="col-1" href="#">
-                    {% if stock.symbol in favs %}
-                    <i class="bi bi-star-fill"></i>
+                    {% if favs %}
+                        {% if stock.symbol in favs %}
+                        <i class="bi bi-star-fill"></i>
+                        {% else %}
+                        <i class="bi bi-star"></i>
+                        {% endif %}
                     {% else %}
                     <i class="bi bi-star"></i>
                     {% endif %}
@@ -54,9 +58,11 @@
             <div class="list-group">
                 <h5 class="mb-1">Favourites</h5>
                 <div id="fav-list">
-                    {% for fav in favs %}
-                        <a class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</a>
-                    {% endfor %}
+                    {% if favs %}
+                        {% for fav in favs %}
+                            <a class="list-group-item list-group-item-action border" id={{fav}} href="/stock/{{fav}}">{{fav}}</a>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>

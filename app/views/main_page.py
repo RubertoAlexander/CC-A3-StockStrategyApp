@@ -14,7 +14,8 @@ def main_page():
     username = request.cookies.get("username")
     if not username: redirect("/login")
     
-    tweet_id_list = tweetapi.streamtweets()
+    # tweet_id_list = tweetapi.streamtweets()
+    tweet_id_list = []
         
     return render_template("mainpage.html", username = username, tweet_id_list = tweet_id_list)
 

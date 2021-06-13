@@ -5,7 +5,7 @@ from app import app
 
 from app.models import tweetapi
 
-@app.route("/")
+@app.route("/home")
 def main_page():
     username = request.cookies.get("username")
     if not username: redirect("/login")

@@ -5,10 +5,6 @@ from app import app
 
 from app.models import tweetapi
 
-
-
-# curl --request GET "https://api.twitter.com/2/users/28002931/tweets" --header "Authorization: Bearer AAAAAAAAAAAAAAAAAAAAAAO%2BQQEAAAAAr5ZOz5kSTKd0%2BX%2Bdme2pvGQGiy0%3DvjMZpdprox8EQSAZiDQlw0Qmm7pM8naocwG9jGg4R34nyjtaxz"
-
 @app.route("/")
 def main_page():
     username = request.cookies.get("username")

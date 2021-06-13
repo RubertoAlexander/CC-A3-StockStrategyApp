@@ -7,16 +7,19 @@
                     <a class="nav-link" href = "/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href = "/builder/strategy">Strategy Builder</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href = "/contactus_page">Contact Us</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href = "/aboutus_page">About Us</a>
                 </li>
+                {% if username %}
+                <li class="nav-item">
+                    <a class="nav-link" href = "/builder/strategy">Strategy Builder</a>
+                </li>
+                {% endif %}
             </ul>
             <ul class="navbar-nav ms-auto">
+                {% if username %}
                 <li class="nav-item">
                     <form autocomplete="off">
                         <div class="autocomplete me-3 row">
@@ -27,30 +30,10 @@
                         </div>
                     </form>
                 </li>
-                <!-- {% if username %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ username }}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="myuserdetails_page/{{ username }}">View my details</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="login_page">Placeholder - Log out</a>
-                        </div>
-                    </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href = "login_page">Login</a>
-                    </li>
-                {% endif %} -->
+                {% endif %}
                 <li class="nav-item">
                     {% if username %}
-                        <!-- No image -->
                             <a class="nav-link" href = "/myuserdetails_page">My Profile</a>
-                        <!-- With image -->
-                        <!-- <a class="nav-link" href = "myuserdetails_page" tar>
-                            <img src = "https://a3-userimage.s3.amazonaws.com/{{ username }}_image.jpg" width = "20" height = "20"> {{ username }}
-                        </a> -->
                     {% else %}
                         <a class="nav-link" href = "/login">Login</a>
                     {% endif %}

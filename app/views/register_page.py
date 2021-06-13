@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, make_response
 
 from app import app
 
-from app.models import dynamodb_register, s3_register
+from app.models import dynamodb_register, s3_register, ses_register
 
 @app.route("/register_page")
 def register_page():
@@ -31,6 +31,9 @@ def register():
         return render_template("registerpage.html", registerError = check_email)
 
     ## IF all good,
+    # Send email to user
+    ses_register.sendNewUserEmail(email)
+
     # Add user image to s3
     imagefile = request.files["file"]
 

@@ -14,7 +14,11 @@
                 </select>
                 <small class="form-text text-muted">Select from your favourites</small>
             </div>
-            <div class="col-8"></div> 
+            <div class="col-8">
+                <label for="strategy-name">Strategy Name</label>
+                <input type="text" id="strategy-name" name="strategy-name" class="form-control">
+                <button type="button" id="save" class="btn btn-secondary submit">Save</button>
+            </div> 
             <div class="mb-3 col-1">
                 <label for="timerange">Time Range</label>
                 <select name="timerange" id="timerange" class="form-select">
@@ -78,7 +82,7 @@
                 <input type="hidden" name="indicator_buys" id="indicator-buys" value="">
                 <input type="hidden" name="indicator_sells" id="indicator-sells" value="">
             </div>
-            <button type="button" id="submit" class="btn btn-primary">Backtest</button>
+            <button type="button" id="backtest" class="btn btn-primary submit">Backtest</button>
         </div>
     </form>
     <div id="backtest-box">
@@ -117,9 +121,17 @@
                 indicator_box.appendChild(indicator);
             };
         });
-        document.querySelectorAll('button#submit').forEach(item => {
+        document.querySelectorAll('button.submit').forEach(item => {
             item.onclick = () => {
                 stock = document.getElementById("stock").value
+                url = ""
+                if (item.id == "backtest") {
+                    url = "/builder/backtest/"+stock;
+                }
+                else if (item.id == "save") {
+                    stratName = document.getElementById("strategy-name")
+                    url = "/builder/"+stock+"/save/"+stratName.value
+                }
                 fetch("/builder/backtest/"+stock, {
                     method: "POST",
                     body: JSON.stringify({
@@ -158,8 +170,6 @@
                                                     "<h5 class='card-title'>Lose Percentage</h5>" +
                                                     "<p class=card-text>"+lose+"%</p>" +
                                                 "</div>"
-                        
-                        profit + " " + JSON.stringify(data.trades) + " " + win + " " + lose
                     })
                 });
             }

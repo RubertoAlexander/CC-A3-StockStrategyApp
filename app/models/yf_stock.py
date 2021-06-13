@@ -27,10 +27,27 @@ def get_prices(symbol: str):
     }
     return prices
 
+def get_data(interval: str, symbol: str, range: str):
+    response = get_chart(interval, symbol, range)
+    quotes = response["chart"]["result"][0]["indicators"]["quote"][0]
+    
+    return quotes
+
 def get_summary(symbol: str):
     endpoint = url + "/get-summary"
     querystring = {"symbol":symbol, "region":REGION}
 
+    response = get_response(querystring, endpoint)
+    return response
+
+def get_chart(interval: str, symbol: str, range: str):
+    endpoint = url + "/get-chart"
+    querystring = {
+        "interval": interval,
+        "symbol":symbol,
+        "range": range, 
+        "region":REGION
+        }
     response = get_response(querystring, endpoint)
     return response
 

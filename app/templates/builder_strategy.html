@@ -1,0 +1,169 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<body class="container">
+
+    <form method="post" class="m-3" id="form">
+        <div class="row">
+            <div class="mb-3 col-2">
+                <label for="stock">Stock</label>
+                <select name="stock" id="stock" class="form-select">
+                    {% for stock in favs %}
+                        <option value="{{ stock }}">{{ stock }}</option>
+                    {% endfor %}
+                </select>
+                <small class="form-text text-muted">Select from your favourites</small>
+            </div>
+            <div class="col-8"></div> 
+            <div class="mb-3 col-1">
+                <label for="timerange">Time Range</label>
+                <select name="timerange" id="timerange" class="form-select">
+                    <option value="1d">1d</option>
+                    <option value="5d">5d</option>
+                    <option value="1mo">1mo</option>
+                    <option value="3mo">3mo</option>
+                    <option value="6mo">6mo</option>
+                    <option value="1y">1y</option>
+                    <option value="2y">2y</option>
+                    <option value="5y">5y</option>
+                    <option value="10y">10y</option>
+                    <option value="ytd">ytd</option>
+                    <option value="max">max</option>
+                </select>
+            </div>
+            <div class="mb-3 col-1">
+                <label for="interval">Interval</label>
+                <select name="interval" id="interval" class="form-select">
+                    <option value="1m">1m</option>
+                    <option value="2m">2m</option>
+                    <option value="5m">5m</option>
+                    <option value="15m">15m</option>
+                    <option value="60m">60m</option>
+                    <option value="1d">1d</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3 row">
+                    <label for="rule" class="col-6">Buy/Sell</label>
+                    <div class="col-6">
+                        <select name="rule" id="rule" class="form-select">
+                            <option value="buy">Buy</option>
+                            <option value="sell">Sell</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="indicator" class="col-6" >Indicator</label>
+                    <div class="col-6">
+                        <select name="indicator" id="indicator" class="form-select">
+                            <option value="stoch">Stochastic</option>
+                            <option value="rsi">RSI</option>
+                            <option value="sma">SMA</option>
+                            <option value="macd">MACD</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <div class="col"></div>
+                    <div class="col">
+                        <button type="button" id="add" class="btn btn-secondary">Add Indicator</button>
+                    </div>
+                    <div class="col"></div>
+                 </div>
+            </div>
+            <div id="indicator-box" class="col">
+                <ul class="list-group list-group-flush"></ul>
+                <input type="hidden" name="indicator_buys" id="indicator-buys" value="">
+                <input type="hidden" name="indicator_sells" id="indicator-sells" value="">
+            </div>
+            <button type="button" id="submit" class="btn btn-primary">Backtest</button>
+        </div>
+    </form>
+    <div id="backtest-box">
+    </div>
+
+
+</body>
+
+<script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('button#add').forEach(item => {
+            item.onclick = () => {
+
+                var indicator_val_node = document.getElementById("indicator");
+
+                var indicator_rule_node = document.getElementById("rule");
+                var indicator_rule = indicator_rule_node.value;
+
+                var indicator_box = document.getElementById("indicator-box");
+                var indicator_buys = document.getElementById("indicator-buys");
+                var indicator_sells = document.getElementById("indicator-sells");
+                
+                var indicator = document.createElement("li");
+                indicator.innerHTML += indicator_val_node.options[indicator_val_node.selectedIndex].text;
+                indicator.classList.add("list-group-item", "d-flex", "justify-content-between", "align-items-center")
+
+                if (indicator_rule == "buy"){
+                    indicator.innerHTML += "<span class='badge bg-success rounded-pill'>"+indicator_rule+"</span>"
+                    indicator_buys.value += indicator_val_node.value+",";
+                }
+                else {
+                    indicator.innerHTML += "<span class='badge bg-danger rounded-pill'>"+indicator_rule+"</span>"
+                    indicator_sells.value += indicator_val_node.value+",";
+                }
+                indicator_box.appendChild(indicator);
+            };
+        });
+        document.querySelectorAll('button#submit').forEach(item => {
+            item.onclick = () => {
+                stock = document.getElementById("stock").value
+                fetch("/builder/backtest/"+stock, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        "timerange": document.getElementById("timerange").value,
+                        "interval": document.getElementById("interval").value,
+                        "stock": document.getElementById("stock"),
+                        "indicator_buys": document.getElementById("indicator-buys").value,
+                        "indicator_sells": document.getElementById("indicator-sells").value
+                    }),
+                    credentials: "include",
+                    cache: "no-cache",
+                    headers: new Headers({
+                    "content-type": "application/json"
+                    })
+                }).then(function (response) {
+                    response.json().then(function(data) {
+                        backtestBox = document.getElementById("backtest-box")
+                        backtestBox.classList.add("card")
+
+                        var profit = data.profit * 100
+                        var win = data.win * 100
+                        var lose = data.lose * 100
+                        var proft_li = document.createElement("li");
+
+                        // card_body = document.createElement("div")
+                        // card_body.classList.add("card-header")
+                        // card_body.innerHTML += "Backtest Results"
+                        backtestBox.innerHTML +="<div class='card-header'>Backtest Results</div>" +
+                                                "<div class='card-body'>" +
+                                                    "<h5 class='card-title'>Profit:</h5>" +
+                                                    "<p class=card-text>"+profit+"%</p>" +
+                                                    "<h5 class='card-title'>Trades:</h5>" +
+                                                    "<p class=card-text>"+data.trades+"</p>" +
+                                                    "<h5 class='card-title'>Win Percentage:</h5>" +
+                                                    "<p class=card-text>"+win+"%</p>" +
+                                                    "<h5 class='card-title'>Lose Percentage</h5>" +
+                                                    "<p class=card-text>"+lose+"%</p>" +
+                                                "</div>"
+                        
+                        profit + " " + JSON.stringify(data.trades) + " " + win + " " + lose
+                    })
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

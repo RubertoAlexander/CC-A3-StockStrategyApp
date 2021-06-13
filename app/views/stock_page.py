@@ -16,7 +16,7 @@ def stock_page(symbol: str):
 
     favourites = dynamodb_favourites.get_favourites(username)
     
-    return render_template("stock_page.html", stock=stock, favs=favourites["stocks"])
+    return render_template("stock_page.html", username = username, stock=stock, favs=favourites["stocks"])
 
 @app.route("/fav/<symbol>", methods=["POST"])
 def favourite(symbol: str):
